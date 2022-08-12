@@ -1,0 +1,50 @@
+----- In order to execute kind of code run "py manage.py sqlmigrate name_of_app 0001
+--
+-- Create model Leads
+--
+
+CREATE TABLE "leads_user" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+	"password" varchar(128) NOT NULL, "last_login" datetime NULL, 
+	"is_superuser" bool NOT NULL, "username" varchar(150) NOT NULL UNIQUE, 
+	"first_name" varchar(150) NOT NULL, 
+	"last_name" varchar(150) NOT NULL, 
+	"email" varchar(254) NOT NULL, 
+	"is_staff" bool NOT NULL, 
+	"is_active" bool NOT NULL, 
+	"date_joined" datetime NOT NULL);
+
+CREATE TABLE "leads_user_groups" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+	"user_id" bigint NOT NULL REFERENCES "leads_user" ("id") DEFERRABLE INITIALLY DEFERRED, 
+	"group_id" integer NOT NULL REFERENCES "auth_group" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+CREATE TABLE "leads_user_user_permissions" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+	"user_id" bigint NOT NULL REFERENCES "leads_user" ("id") DEFERRABLE INITIALLY DEFERRED, 
+	"permission_id" integer NOT NULL REFERENCES "auth_permission" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+--
+-- Create model Agent
+--
+
+CREATE TABLE "leads_agent" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+	"user_id" bigint NOT NULL UNIQUE REFERENCES "leads_user" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+--
+-- Create model Lead
+--
+CREATE TABLE "leads_lead" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "first_name" varchar(20) NOT NULL, 
+	"last_name" varchar(20) NOT NULL, "age" integer NOT NULL, 
+	"agent_id" bigint NOT NULL REFERENCES "leads_agent" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+CREATE UNIQUE INDEX "leads_user_groups_user_id_group_id_88d9b26c_uniq" ON "leads_user_groups" ("user_id", "group_id");
+CREATE INDEX "leads_user_groups_user_id_6890bdd8" ON "leads_user_groups" ("user_id");
+CREATE INDEX "leads_user_groups_group_id_17e877ad" ON "leads_user_groups" ("group_id");
+CREATE UNIQUE INDEX "leads_user_user_permissions_user_id_permission_id_5b6424e2_uniq" ON "leads_user_user_permissions" ("user_id", "permission_id");
+CREATE INDEX "leads_user_user_permissions_user_id_2a9cf662" ON "leads_user_user_permissions" ("user_id");
+CREATE INDEX "leads_user_user_permissions_permission_id_88335dba" ON "leads_user_user_permissions" ("permission_id");
+CREATE INDEX "leads_lead_agent_id_fb1042af" ON "leads_lead" ("agent_id");
+COMMIT;

@@ -15,6 +15,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth.forms import UserCreationForm
 from leads.forms import CustomeUserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from agents.mixins import OrganisorAndLoginRequiredMixin
 
 #CRUD + L - Create, Retrieve, Update and Delete + List
 
@@ -71,7 +72,7 @@ class LeadDetailView(LoginRequiredMixin, DetailView):
     #return HttpResponse("Here is the detail view")
     return render(request, 'leads/lead_detail.html', context)"""
 
-class LeadCreateView(LoginRequiredMixin, CreateView):
+class LeadCreateView(OrganisorAndLoginRequiredMixin, CreateView):
 
     template_name = 'leads/lead_create.html'
     form_class = LeadModelForm
@@ -104,7 +105,7 @@ class LeadCreateView(LoginRequiredMixin, CreateView):
     }
     return render(request, 'leads/lead_create.html', context)"""
 
-class LeadUpdateView(LoginRequiredMixin, UpdateView):
+class LeadUpdateView(OrganisorAndLoginRequiredMixin, UpdateView):
 
     template_name = 'leads/lead_update.html'
     form_class = LeadModelForm
@@ -129,7 +130,7 @@ class LeadUpdateView(LoginRequiredMixin, UpdateView):
     }
     return render(request, 'leads/lead_update.html', context)"""
 
-class LeadDeleteView(LoginRequiredMixin, DeleteView):
+class LeadDeleteView(OrganisorAndLoginRequiredMixin, DeleteView):
 
     template_name = "leads/lead_delete.html"
     queryset = Lead.objects.all()

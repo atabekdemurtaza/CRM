@@ -8,7 +8,11 @@ from django.db.models.signals import pre_save
 
 class User(AbstractUser):
 
-    pass 
+    # Создадим два вида пользователя
+    # Админ будет видеть другой шаблон, 
+    # А простой юзер другой!
+    is_organisor = models.BooleanField(default=True)
+    is_agent     = models.BooleanField(default=False)
 
 class UserProfile(models.Model):
 
@@ -22,7 +26,7 @@ class Lead(models.Model):
     first_name = models.CharField(max_length=20)
     last_name  = models.CharField(max_length=20)
     age        = models.IntegerField(default=0)
-    agent      = models.ForeignKey("Agent", on_delete=models.CASCADE)
+    agent      = models.ForeignKey("Agent", null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
 
