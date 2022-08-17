@@ -9,6 +9,7 @@ from leads.views import LeadDetailView
 from leads.views import LeadCreateView
 from leads.views import LeadUpdateView
 from leads.views import LeadDeleteView
+from leads.views import AssignAgentView
 
 app_name = 'leads'
 
@@ -22,8 +23,9 @@ urlpatterns = [
     path('<int:pk>/update/', LeadUpdateView.as_view(), name='lead-update'),
     #path('<int:pk>/delete/', lead_delete, name='lead-delete'),
     path('<int:pk>/delete/', LeadDeleteView.as_view(), name='lead-delete'),
+    path('<int:pk>/assign-agent/', AssignAgentView.as_view(), name='assign-agent'),
     #path('create/', lead_create, name='lead-create')
-    path('create/', LeadCreateView.as_view(), name='lead-create')
+    path('create/', LeadCreateView.as_view(), name='lead-create'),
 
 ]
 
