@@ -4,6 +4,10 @@ from leads.models import Agent
 from django.shortcuts import reverse
 from .forms import AgentModelForm
 from .mixins import OrganisorAndLoginRequiredMixin
+from django.core.mail import send_mail
+from django.contrib.auth.models import User
+from random import randint
+from web.encrypt_util import *
 
 #from .mixins import OrganisorAndLoginRequiredMixin - Создай свой миксин. Если пользватель не супер админ
 
@@ -26,9 +30,30 @@ class AgentCreateView(OrganisorAndLoginRequiredMixin, generic.CreateView):
     
     def form_valid(self, form):
 
-        agent = form.save(commit=False)
+        """agent = form.save(commit=False)
         agent.organisation = self.request.user.userprofile
         agent.save()
+        return super(AgentCreateView, self).form_valid(form)"""
+
+        user = form.save(commit=False)
+        user.is_agent = True 
+        user.is_organisor = False
+        user.set_password(str(randint(0,10000000)))
+        user.save()
+        Agent.objects.create(
+            user = user,
+            organisation=self.request.user.userprofile
+        )
+        send_mail(
+            subject="You are invited to be an agent",
+            message="You were added as an agent on Militech CRM. Please come login to start working.",
+            from_email="atabekdemurtaza@gmail.com",
+            recipient_list=[user.email]
+        )
+        encryptpass= encrypt(self.request.user.password)
+        #print(encryptpass)
+        decryptpass= decrypt(encryptpass)
+        #print(decryptpass)
         return super(AgentCreateView, self).form_valid(form)
 
 class AgentDetailView(OrganisorAndLoginRequiredMixin, generic.DetailView):

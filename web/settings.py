@@ -135,4 +135,6 @@ LOGIN_REDIRECT_URL = "/leads"
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = 'landing-page'
 
+ENCRYPT_KEY = b'vdbI1hZ2HZv2U4CGLepfp3FOXCf5aEiVSf2RcFqxR2s='
+
 
