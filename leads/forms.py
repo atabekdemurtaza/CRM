@@ -12,10 +12,7 @@ class LeadModelForm(forms.ModelForm):
     class Meta:
         model = Lead 
         fields = (
-            'first_name',
-            'last_name',
-            'age',
-            'agent'
+            '__all__'
         )
 
 class LeadForm(forms.Form):
@@ -50,3 +47,10 @@ class AssignAgentForm(forms.Form):
         super(AssignAgentForm, self).__init__(*args, **kwargs)
         self.fields["agent"].queryset = agents
     
+class LeadCategoryUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Lead 
+        fields = (
+            'category',
+        )
