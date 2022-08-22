@@ -20,6 +20,8 @@ from agents.mixins import OrganisorAndLoginRequiredMixin
 from django.views.generic import FormView
 from leads.forms import AssignAgentForm
 from leads.forms import LeadCategoryUpdateForm
+from leads.forms import BackGroundForm
+from leads.models import BackGround
 #CRUD + L - Create, Retrieve, Update and Delete + List
 
 
@@ -119,6 +121,10 @@ class LeadCreateView(OrganisorAndLoginRequiredMixin, CreateView):
         return reverse("leads:lead-list")
 
     def form_valid(self, form):
+
+        lead = form.save(commit=False)
+        lead.organisation = self.request.user.userprofile
+        lead.save()
         #Todo send email
         send_mail(
             subject="A lead has been created",
@@ -307,6 +313,22 @@ class LeadCategoryUpdateView(LoginRequiredMixin, UpdateView):
             queryset = Lead.objects.filter(organisation=user.agent.organisation)
             queryset = queryset.filter(agent__user=user)
         return queryset
+
+def BackGroundView(request):
+
+    if request.method == 'POST':  
+        form = BackGroundForm(request.POST, request.FILES)  
+        if form.is_valid():  
+            form.save()  
+  
+            # Getting the current instance object to display in the template  
+            img_object = form.instance  
+              
+            return render(request, 'image_form.html', {'img_obj': img_object})  
+    else:  
+        form = BackGroundForm()  
+  
+    return render(request, 'image_form.html', {'form': form})  
 
 """def lead_update(request, pk):
 

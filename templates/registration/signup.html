@@ -1,16 +1,20 @@
 {% extends 'base.html' %}
+{% load tailwind_filters %}
 
 {% block content %}
-  <section class="text-gray-600 body-font">
-    <div class="bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-5 md:mt-0">
-      <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-      <button class="flex-shrink-0 text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg mt-10 sm:mt-0">
+  <div class="max-w-lg mx-auto">
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="w-full bg-blue-500 text-white hover:bg-blue-600 px-3 py-1 rounded-md">
         Button
       </button>
     </form>
+    <div class="py-5 border-t border-gray-200 mt-5">
+      <a class="hover:text-blue-500 mt-3" href="{% url 'login' %}">
+        Already have an account?
+      </a>
     </div>
-  </section>
+  </div>
 {% endblock %}
 

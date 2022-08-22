@@ -21,6 +21,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return f'{self.user.username}'
 
+class LeadManager(models.Manager):
+
+    def get_queryset(self):
+        return super().get_queryset()
+
 class Lead(models.Model):
 
     first_name = models.CharField(max_length=20)
@@ -29,6 +34,13 @@ class Lead(models.Model):
     organisation = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     agent      = models.ForeignKey("Agent", null=True, blank=True, on_delete=models.SET_NULL)
     category = models.ForeignKey("Category",related_name="leads", blank=True,null=True ,on_delete=models.SET_NULL)
+
+    description = models.TextField()
+    date_added = models.DateTimeField(auto_now_add=True)
+    phone_number = models.CharField(max_length=20)
+    email = models.EmailField()
+
+    objects = LeadManager()
 
     def __str__(self):
 
@@ -51,6 +63,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+class BackGround(models.Model):
+
+    image = models.ImageField(upload_to='img')  
 
 def post_user_created_signal(sender, instance, created, **kwargs):
    #print(instance, created)

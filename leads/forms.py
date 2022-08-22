@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from leads.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UsernameField
+from leads.models import BackGround
 
 User = get_user_model()
 
@@ -53,4 +54,13 @@ class LeadCategoryUpdateForm(forms.ModelForm):
         model = Lead 
         fields = (
             'category',
+        )
+    
+class BackGroundForm(forms.ModelForm):
+
+    class Meta:
+
+        model = BackGround
+        fields = (
+            'image',
         )
